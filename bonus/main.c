@@ -6,11 +6,11 @@
 /*   By: paulguignier <marvin@42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 21:30:58 by paulguign         #+#    #+#             */
-/*   Updated: 2021/10/25 14:54:18 by pguignie         ###   ########.fr       */
+/*   Updated: 2021/10/25 14:54:28 by pguignie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
 static t_data	*init_data(int argc, char **argv, char **env)
 {
@@ -18,11 +18,11 @@ static t_data	*init_data(int argc, char **argv, char **env)
 
 	data = (t_data *)malloc(sizeof(t_data));
 	if (error_catch(!data, NULL, "Malloc failed"))
-		return (NULL);
+		exit (1);
 	data->argc = argc;
 	data->argv = argv;
 	if (error_catch(!env[0], NULL, "No environement"))
-		return (NULL);
+		exit (1);
 	data->env = env;
 	return (data);
 }
@@ -32,11 +32,11 @@ int	main(int argc, char **argv, char **env)
 	int		fd_out;
 	t_data	*data;
 
-	if (argc == 5)
+	if (argc >= 5)
 	{
 		data = init_data(argc, argv, env);
-		if (!data)
-			return (1);
+		if (!ft_strncmp(argv[1], "here_doc", 9))
+			here_doc(data, argv[2]);
 		data->fd_in = open(argv[1], O_RDONLY);
 		if (!ft_strncmp(argv[1], argv[argc - 1], ft_strlen(argv[1]) + 1))
 			fd_out = open(argv[argc - 1], O_WRONLY | O_CREAT, 0644);

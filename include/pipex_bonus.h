@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   pipex_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: paulguignier <marvin@42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 21:32:22 by paulguign         #+#    #+#             */
-/*   Updated: 2021/10/23 22:06:01 by paulguign        ###   ########.fr       */
+/*   Updated: 2021/10/23 22:02:38 by paulguign        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#ifndef PIPEX_BONUS_H
+# define PIPEX_BONUS_H
 
 # include "libft.h"
 # include <fcntl.h>
@@ -33,6 +33,7 @@ typedef struct s_data
 
 int		error_catch(int test, char *file, char *msg);
 void	ft_pipe(t_data *data, int fd_in, int fd_out, int step);
+void	here_doc(t_data *data, char *limiter);
 void	ft_free_split(char **split);
 int		ft_free_data(t_data *data);
 

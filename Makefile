@@ -6,9 +6,9 @@ OBJDIR	= obj
 
 BONUSOBJDIR	= bonusobj
 
-SRCS	= $(SRCDIR)/main.c
+SRCS	= $(SRCDIR)/main.c $(SRCDIR)/pipex.c $(SRCDIR)/free.c $(SRCDIR)/error.c
 
-BONUSSRCS	= 
+BONUSSRCS	= $(BONUSSRCDIR)/main.c $(BONUSSRCDIR)/pipex.c $(BONUSSRCDIR)/here_doc.c $(BONUSSRCDIR)/free.c $(BONUSSRCDIR)/error.c
 
 OBJS	= $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
@@ -20,15 +20,17 @@ LIB		= libft/libft.a
 
 CC 		= gcc
 
-CFLAGS	= -Wall -Wextra -Werror -fsanitize=address
+CFLAGS	= -Wall -Wextra -Werror
 
 RM		= rm -rf
 
 NAME	= pipex
 
-BONUS	= bonus
+BONUS	= pipex_bonus
 
 all		: $(NAME)
+
+bonus	: $(BONUS)
 
 $(OBJDIR)/%.o : $(SRCDIR)/%.c
 	@mkdir -p $(OBJDIR)
@@ -44,7 +46,7 @@ $(BONUSOBJDIR)/%.o : $(BONUSSRCDIR)/%.c
 
 $(BONUS)	: $(BONUSOBJS)
 	@make -C libft/ -s
-	$(CC) $(CFLAGS) $(BONUSOBJS) $(INCLUDE) $(LIB) -o pipex
+	$(CC) $(CFLAGS) $(BONUSOBJS) $(INCLUDE) $(LIB) -o $@
 
 clean	:
 	$(RM) libft/obj
@@ -54,6 +56,6 @@ clean	:
 fclean	: clean
 	$(RM) $(LIB)
 	$(RM) $(NAME)
-	$(RM) checker
+	$(RM) $(BONUS)
 
 re		: fclean all
