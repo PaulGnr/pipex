@@ -6,7 +6,7 @@
 /*   By: paulguignier <marvin@42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 11:59:19 by paulguign         #+#    #+#             */
-/*   Updated: 2021/10/23 21:58:32 by paulguign        ###   ########.fr       */
+/*   Updated: 2021/10/25 15:07:36 by pguignie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,12 @@ static char	*ft_getstr(int fd)
 	return (str);
 }
 
+static int	ft_free_data_str(t_data *data, char *str)
+{
+	free(str);
+	return (ft_free_data(data));
+}
+
 static void	ft_pipe_heredoc(t_data *data, int fd_out, int step, char *doc)
 {
 	int	fd[2];
@@ -57,6 +63,7 @@ static void	ft_pipe_heredoc(t_data *data, int fd_out, int step, char *doc)
 	{
 		close(fd[0]);
 		ft_putstr_fd(doc, fd[1]);
+		ft_free_data_str(data, doc);
 		exit (0);
 	}
 	close(fd[1]);
@@ -64,12 +71,6 @@ static void	ft_pipe_heredoc(t_data *data, int fd_out, int step, char *doc)
 	if (status)
 		exit (1);
 	ft_pipe(data, fd[0], fd_out, step + 1);
-}
-
-static int	ft_free_data_str(t_data *data, char *str)
-{
-	free(str);
-	return (ft_free_data(data));
 }
 
 static char	*here_doc_parse(t_data *data, char *limiter)
