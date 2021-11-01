@@ -6,7 +6,7 @@
 /*   By: paulguignier <marvin@42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 11:59:19 by paulguign         #+#    #+#             */
-/*   Updated: 2021/10/25 15:07:36 by pguignie         ###   ########.fr       */
+/*   Updated: 2021/10/30 14:47:11 by paulguign        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,33 +44,8 @@ static char	*ft_getstr(int fd)
 static int	ft_free_data_str(t_data *data, char *str)
 {
 	free(str);
-	return (ft_free_data(data));
-}
-
-static void	ft_pipe_heredoc(t_data *data, int fd_out, int step, char *doc)
-{
-	int	fd[2];
-	int	pid;
-	int	status;
-
-	status = 0;
-	if (error_catch(pipe(fd) < 0, NULL, strerror(errno)))
-		exit (1);
-	pid = fork();
-	if (error_catch(pid < 0, NULL, strerror(errno)))
-		exit (1);
-	if (pid == 0)
-	{
-		close(fd[0]);
-		ft_putstr_fd(doc, fd[1]);
-		ft_free_data_str(data, doc);
-		exit (0);
-	}
-	close(fd[1]);
-	waitpid(pid, &status, 0);
-	if (status)
-		exit (1);
-	ft_pipe(data, fd[0], fd_out, step + 1);
+	free(data);
+	return (1);
 }
 
 static char	*here_doc_parse(t_data *data, char *limiter)
@@ -81,7 +56,7 @@ static char	*here_doc_parse(t_data *data, char *limiter)
 
 	doc = (char *)ft_calloc(sizeof(char), 1);
 	if (error_catch(!doc, NULL, "Malloc failed"))
-		exit (ft_free_data(data));
+		exit (ft_free_data(data, 1));
 	str = ft_getstr(0);
 	if (!str)
 		exit (ft_free_data_str(data, str));
@@ -92,7 +67,7 @@ static char	*here_doc_parse(t_data *data, char *limiter)
 		free(doc);
 		free(str);
 		if (error_catch(!tmp, NULL, "Malloc failed"))
-			exit (ft_free_data(data));
+			exit (ft_free_data(data, 1));
 		doc = tmp;
 		str = ft_getstr(0);
 		if (!str)
@@ -102,15 +77,34 @@ static char	*here_doc_parse(t_data *data, char *limiter)
 	return (doc);
 }
 
-void	here_doc(t_data *data, char *limiter)
+void	ft_exec_heredoc(t_data *data, char *doc, int *fd)
+{
+	close(fd[0]);
+	ft_putstr_fd(doc, fd[1]);
+	close(fd[1]);
+	ft_free_data_str(data, doc);
+	exit (0);
+}
+
+int	here_doc(t_data *data, char *limiter)
 {
 	char	*doc;
-	int		fd_out;
+	int		fd[2];
+	int		pid;
+	int		ret;
 
 	doc = here_doc_parse(data, limiter);
-	fd_out = open(data->argv[data->argc - 1], O_WRONLY | O_CREAT | O_APPEND,
-			0644);
-	if (error_catch(fd_out < 0, data->argv[data->argc - 1], strerror(errno)))
-		exit (ft_free_data(data));
-	ft_pipe_heredoc(data, fd_out, 3, doc);
+	if (error_catch(pipe(fd) < 0, NULL, strerror(errno)))
+		exit (ft_free_data_str(data, doc));
+	pid = fork();
+	if (error_catch(pid < 0, NULL, strerror(errno)))
+		exit (ft_free_data_str(data, doc));
+	if (pid == 0)
+		ft_exec_heredoc(data, doc, fd);
+	free(doc);
+	close(fd[1]);
+	ret = ft_pipe(data, fd[0], 2);
+	close(fd[0]);
+	waitpid(pid, NULL, 0);
+	return (ret);
 }

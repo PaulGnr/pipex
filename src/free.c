@@ -6,7 +6,7 @@
 /*   By: paulguignier <marvin@42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 23:18:07 by paulguign         #+#    #+#             */
-/*   Updated: 2021/10/21 23:53:46 by paulguign        ###   ########.fr       */
+/*   Updated: 2021/10/27 17:08:08 by pguignie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ void	ft_free_split(char **split)
 	free(split);
 }
 
-int	ft_free_data(t_data *data)
+int	ft_free_data(t_data *data, int ret)
 {
 	free(data);
-	return (1);
+	return (ret);
 }

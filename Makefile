@@ -1,18 +1,18 @@
 SRCDIR	= src
 
-BONUSSRCDIR	= bonus
+BNSDIR	= bonus
 
 OBJDIR	= obj
 
-BONUSOBJDIR	= bonusobj
+BNSOBJDIR	= bonusobj
 
-SRCS	= $(SRCDIR)/main.c $(SRCDIR)/pipex.c $(SRCDIR)/free.c $(SRCDIR)/error.c
+SRCS	= $(SRCDIR)/main.c $(SRCDIR)/pipex.c $(SRCDIR)/cmd.c $(SRCDIR)/redirection.c $(SRCDIR)/free.c $(SRCDIR)/error.c
 
-BONUSSRCS	= $(BONUSSRCDIR)/main.c $(BONUSSRCDIR)/pipex.c $(BONUSSRCDIR)/here_doc.c $(BONUSSRCDIR)/free.c $(BONUSSRCDIR)/error.c
+BNS	= $(BNSDIR)/main.c $(BNSDIR)/pipex.c $(BNSDIR)/cmd.c $(BNSDIR)/redirection.c $(BNSDIR)/here_doc.c $(BNSDIR)/free.c $(BNSDIR)/error.c
 
 OBJS	= $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
-BONUSOBJS	= $(BONUSSRCS:$(BONUSSRCDIR)/%.c=$(BONUSOBJDIR)/%.o)
+BNSOBJS	= $(BNS:$(BNSDIR)/%.c=$(BNSOBJDIR)/%.o)
 
 INCLUDE	= -I include/ -I libft/include/
 
@@ -23,6 +23,10 @@ CC 		= gcc
 CFLAGS	= -Wall -Wextra -Werror
 
 RM		= rm -rf
+
+HEAD	= include/$(NAME).h
+
+HEADBNS	= include/$(BONUS).h
 
 NAME	= pipex
 
@@ -36,21 +40,21 @@ $(OBJDIR)/%.o : $(SRCDIR)/%.c
 	@mkdir -p $(OBJDIR)
 	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
 
-$(NAME)	: $(OBJS)
+$(NAME)	: $(OBJS) $(HEAD)
 	@make -C libft/ -s
 	$(CC) $(CFLAGS) $(OBJS) $(INCLUDE) $(LIB) -o $@
 
-$(BONUSOBJDIR)/%.o : $(BONUSSRCDIR)/%.c
-	@mkdir -p $(BONUSOBJDIR)
+$(BNSOBJDIR)/%.o : $(BNSDIR)/%.c
+	@mkdir -p $(BNSOBJDIR)
 	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
 
-$(BONUS)	: $(BONUSOBJS)
+$(BONUS)	: $(BNSOBJS) $(HEADBNS)
 	@make -C libft/ -s
-	$(CC) $(CFLAGS) $(BONUSOBJS) $(INCLUDE) $(LIB) -o $@
+	$(CC) $(CFLAGS) $(BNSOBJS) $(INCLUDE) $(LIB) -o $@
 
 clean	:
 	$(RM) libft/obj
-	$(RM) $(BONUSOBJDIR)
+	$(RM) $(BNSOBJDIR)
 	$(RM) $(OBJDIR)
 
 fclean	: clean

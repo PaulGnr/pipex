@@ -6,7 +6,7 @@
 /*   By: pguignie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 12:27:35 by pguignie          #+#    #+#             */
-/*   Updated: 2021/05/23 11:18:19 by pguignie         ###   ########.fr       */
+/*   Updated: 2021/10/28 15:04:56 by pguignie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,9 @@ void	ft_putstr_fd(char *s, int fd)
 {
 	int	i;
 
-	i = 0;
-	if (s != NULL)
+	if (s)
 	{
-		while (s[i])
-			write(fd, &s[i++], 1);
+		i = ft_strlen(s);
+		write(fd, s, i + 1);
 	}
 }
