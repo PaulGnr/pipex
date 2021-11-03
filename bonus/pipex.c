@@ -6,7 +6,7 @@
 /*   By: paulguignier <marvin@42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 22:54:07 by paulguign         #+#    #+#             */
-/*   Updated: 2021/10/30 14:43:09 by paulguign        ###   ########.fr       */
+/*   Updated: 2021/11/03 15:25:39 by pguignie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,25 +36,27 @@ static void	error_cmd(char *arg, char **env)
 
 static void	ft_pipe_exec(t_data *data, int *fd, int step)
 {
-	char	*cmd;
-	char	**split;
+	char	*pathname;
+	char	**argv;
 
 	if (error_catch(dup2(fd[0], STDIN_FILENO) < 0, NULL, strerror(errno)))
-		exit (ft_free_data(data, 1));
+		exit (1);
 	if (error_catch(dup2(fd[1], STDOUT_FILENO) < 0, NULL, strerror(errno)))
-		exit (ft_free_data(data, 1));
+		exit (1);
 	close(fd[0]);
 	close(fd[1]);
-	split = ft_split(data->argv[step + 1], ' ');
-	cmd = ft_getcmd(split[0], data->env);
-	if (!cmd)
+	argv = ft_split(data->argv[step + 1], ' ');
+	pathname = ft_getcmd(argv[0], data->env);
+	if (!pathname)
 	{
-		error_cmd(split[0], data->env);
-		ft_free_split(split);
-		exit (ft_free_data(data, 127));
+		error_cmd(argv[0], data->env);
+		ft_free_split(argv);
+		exit (127);
 	}
-	execve(cmd, split, data->env);
-	exit (0);
+	execve(pathname, argv, data->env);
+	free(pathname);
+	ft_free_split(argv);
+	exit (1);
 }
 
 void	ft_redirection(t_data *data, int *fd, int fd_in, int step)
@@ -73,10 +75,10 @@ int	ft_pipe(t_data *data, int fd_in, int step)
 
 	status = 0;
 	if (error_catch(pipe(fd) < 0, NULL, strerror(errno)))
-		exit (ft_free_data(data, 1));
+		exit (1);
 	pid = fork();
 	if (error_catch(pid < 0, NULL, strerror(errno)))
-		exit (ft_free_data(data, 1));
+		exit (1);
 	if (pid == 0)
 		ft_redirection(data, fd, fd_in, step);
 	if (fd_in >= 0)
@@ -84,9 +86,8 @@ int	ft_pipe(t_data *data, int fd_in, int step)
 	close(fd[1]);
 	if (step < data->argc - 3)
 		ret = ft_pipe(data, fd[0], step + 1);
-	close(fd[0]);
 	waitpid(pid, &status, 0);
 	if (step == data->argc - 3)
-		ret = ft_free_data(data, WEXITSTATUS(status));
+		ret = WEXITSTATUS(status);
 	return (ret);
 }

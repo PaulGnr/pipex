@@ -6,7 +6,7 @@
 /*   By: paulguignier <marvin@42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 21:32:22 by paulguign         #+#    #+#             */
-/*   Updated: 2021/10/30 14:39:17 by paulguign        ###   ########.fr       */
+/*   Updated: 2021/11/03 15:21:18 by pguignie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,5 @@ char	*ft_getcmd(char *arg, char **env);
 int		ft_get_infile(t_data *data, int *fd, int fd_in, int step);
 int		ft_get_outfile(t_data *data, int *fd, int step);
 void	ft_free_split(char **split);
-int		ft_free_data(t_data *data, int ret);
 
 #endif
