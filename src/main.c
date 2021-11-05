@@ -6,7 +6,7 @@
 /*   By: paulguignier <marvin@42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 21:30:58 by paulguign         #+#    #+#             */
-/*   Updated: 2021/11/03 15:28:16 by pguignie         ###   ########.fr       */
+/*   Updated: 2021/11/05 01:10:01 by paulguign        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ static t_data	init_data(int argc, char **argv, char **env)
 	data.argc = argc;
 	data.argv = argv;
 	data.env = env;
+	data.oflag = O_TRUNC;
 	return (data);
 }
 

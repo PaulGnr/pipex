@@ -6,7 +6,7 @@
 /*   By: paulguignier <marvin@42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 22:54:07 by paulguign         #+#    #+#             */
-/*   Updated: 2021/11/03 15:29:00 by pguignie         ###   ########.fr       */
+/*   Updated: 2021/11/05 01:41:21 by paulguign        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static void	ft_pipe_exec(t_data *data, int *fd, int step)
 	{
 		error_cmd(argv[0], data->env);
 		ft_free_split(argv);
-		exit (1);
+		exit (127);
 	}
 	execve(pathname, argv, data->env);
 	free(pathname);

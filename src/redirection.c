@@ -6,7 +6,7 @@
 /*   By: paulguignier <marvin@42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/30 14:38:12 by paulguign         #+#    #+#             */
-/*   Updated: 2021/11/03 15:23:40 by pguignie         ###   ########.fr       */
+/*   Updated: 2021/11/05 01:10:39 by paulguign        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	ft_get_outfile(t_data *data, int *fd, int step)
 	{
 		close(fd[1]);
 		fd[1] = open(data->argv[data->argc - 1],
-				O_WRONLY | O_CREAT | O_TRUNC, 0644);
+				O_WRONLY | O_CREAT | data->oflag, 0644);
 		if (error_catch(fd[1] < 0, data->argv[data->argc - 1],
 				strerror(errno)))
 			exit (1);

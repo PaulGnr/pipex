@@ -6,7 +6,7 @@
 /*   By: paulguignier <marvin@42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 21:32:22 by paulguign         #+#    #+#             */
-/*   Updated: 2021/11/03 15:21:18 by pguignie         ###   ########.fr       */
+/*   Updated: 2021/11/05 01:10:12 by paulguign        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ typedef struct s_data
 	int		argc;
 	char	**argv;
 	char	**env;
+	int		oflag;
 }	t_data;
 
 int		error_catch(int test, char *file, char *msg);

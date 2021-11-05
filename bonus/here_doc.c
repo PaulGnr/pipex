@@ -6,7 +6,7 @@
 /*   By: paulguignier <marvin@42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 11:59:19 by paulguign         #+#    #+#             */
-/*   Updated: 2021/11/03 15:19:02 by pguignie         ###   ########.fr       */
+/*   Updated: 2021/11/05 01:39:42 by paulguign        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,27 +18,27 @@ static char	*ft_getstr(int fd)
 	char	*str;
 	char	*tmp;
 
+	ft_putstr_fd("> ", 1);
 	str = (char *)ft_calloc(sizeof(char), 1);
 	if (error_catch(!str, NULL, "Malloc failed"))
 		return (NULL);
 	read(fd, buf, 1);
-	buf[1] = 0;
+	buf[1] = '\0';
 	while (*buf != '\n')
 	{
 		tmp = ft_strjoin(str, buf);
 		free(str);
-		if (error_catch(!str, NULL, "Malloc failed"))
+		if (error_catch(!tmp, NULL, "Malloc failed"))
 			return (NULL);
 		str = tmp;
 		read(fd, buf, 1);
-		buf[1] = 0;
+		buf[1] = '\0';
 	}
 	tmp = ft_strjoin(str, buf);
 	free(str);
-	if (error_catch(!str, NULL, "Malloc failed"))
+	if (error_catch(!tmp, NULL, "Malloc failed"))
 		return (NULL);
-	str = tmp;
-	return (str);
+	return (tmp);
 }
 
 static int	ft_free_str(char *str)
@@ -92,7 +92,7 @@ int	here_doc(t_data *data, char *limiter)
 	int		pid;
 	int		ret;
 
-	data->here_doc = 1;
+	data->oflag = O_APPEND;
 	doc = here_doc_parse(limiter);
 	if (error_catch(pipe(fd) < 0, NULL, strerror(errno)))
 		exit (ft_free_str(doc));
